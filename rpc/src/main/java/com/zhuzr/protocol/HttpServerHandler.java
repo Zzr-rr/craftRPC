@@ -8,7 +8,6 @@ import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
@@ -33,9 +32,7 @@ public class HttpServerHandler {
             // 将执行的结果写进Resp
             IOUtils.write(result, resp.getOutputStream());
         } catch (IOException | NoSuchMethodException | ClassNotFoundException | InvocationTargetException |
-                 IllegalAccessException e) {
-            throw new RuntimeException(e);
-        } catch (InstantiationException e) {
+                 IllegalAccessException | InstantiationException e) {
             throw new RuntimeException(e);
         }
     }

@@ -1,11 +1,15 @@
 package com.zhuzr.proxy;
 
 import com.zhuzr.common.Invocation;
+import com.zhuzr.common.URL;
+import com.zhuzr.loadbalance.LoadBalancer;
 import com.zhuzr.protocol.HttpClient;
+import com.zhuzr.register.RemoteRegister;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.util.List;
 
 public class ProxyFactory {
     public static <T> T getProxy(Class interfaceClass) {
@@ -18,8 +22,13 @@ public class ProxyFactory {
 
                 // 通过Http发送相应的请求
                 HttpClient httpClient = new HttpClient();
-                String result = httpClient.send("localhost", 8080, invocation);
-                return result;
+
+//                // 服务发现
+//                List<URL> list = RemoteRegister.get(interfaceClass.getName());
+//                // 负载均衡
+//                URL url = LoadBalancer.random(list);
+
+                return httpClient.send("localhost", 8080, invocation);
             }
         });
 
