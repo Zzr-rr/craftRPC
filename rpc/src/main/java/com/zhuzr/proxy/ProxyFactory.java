@@ -17,18 +17,21 @@ public class ProxyFactory {
         Object proxyInstance = Proxy.newProxyInstance(interfaceClass.getClassLoader(), new Class[]{interfaceClass}, new InvocationHandler() {
             @Override
             public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+                // 服务mock
+                String mock = System.getProperty("mock");
+                if (mock != null && mock.startsWith("return")) {
+                    return mock.replace("return:", "");
+                }
+
                 Invocation invocation = new Invocation(interfaceClass.getName(), method.getName(),
                         method.getParameterTypes(), args);
-
                 // 通过Http发送相应的请求
                 HttpClient httpClient = new HttpClient();
 
-//                // 服务发现
-//                List<URL> list = RemoteRegister.get(interfaceClass.getName());
-//                // 负载均衡
-//                URL url = LoadBalancer.random(list);
-
-                return httpClient.send("localhost", 8080, invocation);
+                // 服务发现 | 负载均衡 | 服务容灾
+                List<URL> list = RemoteRegister.get(interfaceClass.getName());
+                URL url = LoadBalancer.random(list);
+                return httpClient.send(url.getHostname(), url.getPort(), invocation);
             }
         });
 
