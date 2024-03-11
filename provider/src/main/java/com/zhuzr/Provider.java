@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.zhuzr.rpc.common.pojo.URL;
 import com.zhuzr.rpc.common.registry.LocalRegister;
 import com.zhuzr.rpc.common.registry.RemoteRegister;
+import com.zhuzr.rpc.common.registry.zk.ZkServiceRegistry;
 import com.zhuzr.rpc.server.protocol.HttpServer;
 import com.zhuzr.service.HelloService;
 import com.zhuzr.service.impl.HelloServiceImpl;
@@ -15,7 +16,7 @@ public class Provider {
         // Netty, Tomcat ... 一些Servlet容器 通过用户去配置网络请求的种类
         // 首先注册服务
         URL url = new URL("localhost", 8080);
-        RemoteRegister.register(HelloService.class.getName(), url);
+        ZkServiceRegistry.registerService(HelloService.class.getName(), url);
         LocalRegister.register(HelloService.class.getName(), "1.0", HelloServiceImpl.class);
         HttpServer httpServer = new HttpServer();
         httpServer.start("localhost", 8080);
