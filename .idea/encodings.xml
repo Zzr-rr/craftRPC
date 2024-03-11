@@ -9,6 +9,12 @@
     <file url="file://$PROJECT_DIR$/provider-api/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/provider/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/provider/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/rpc/rpc-client/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/rpc/rpc-client/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/rpc/rpc-common/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/rpc/rpc-common/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/rpc/rpc-server/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/rpc/rpc-server/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/rpc/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/rpc/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
