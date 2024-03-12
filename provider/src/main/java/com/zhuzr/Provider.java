@@ -5,7 +5,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.zhuzr.rpc.common.pojo.URL;
 import com.zhuzr.rpc.common.registry.ZkMethodRegistry;
 import com.zhuzr.rpc.common.registry.ZkServiceRegistry;
-import com.zhuzr.rpc.server.protocol.HttpServer;
+import com.zhuzr.rpc.server.protocol.NettyServer;
 import com.zhuzr.service.HelloService;
 import com.zhuzr.service.impl.HelloServiceImpl;
 
@@ -18,7 +18,9 @@ public class Provider {
         ZkServiceRegistry.registerService(HelloService.class.getName(), "1.0", url);
         ZkMethodRegistry.registerMethod(HelloService.class.getName(), "1.0", HelloServiceImpl.class);
         // LocalRegister.register(HelloService.class.getName(), "1.0", HelloServiceImpl.class);
-        HttpServer httpServer = new HttpServer();
-        httpServer.start("localhost", 8080);
+        // HttpServer httpServer = new HttpServer();
+        // httpServer.start("localhost", 8080);
+        NettyServer nettyServer = new NettyServer();
+        nettyServer.start(url.getHostname(), url.getPort());
     }
 }

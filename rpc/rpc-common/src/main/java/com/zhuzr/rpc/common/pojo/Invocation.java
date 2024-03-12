@@ -18,6 +18,10 @@ public class Invocation implements Serializable {
         this.parameters = parameters;
     }
 
+    public Invocation() {
+
+    }
+
     public String getInterfaceName() {
         return interfaceName;
     }
