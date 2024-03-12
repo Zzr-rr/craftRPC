@@ -2,7 +2,7 @@ package com.zhuzr.rpc.server.protocol;
 
 
 import com.zhuzr.rpc.common.pojo.Invocation;
-import com.zhuzr.rpc.common.registry.LocalRegister;
+import com.zhuzr.rpc.common.registry.ZkMethodDiscovery;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.apache.commons.io.IOUtils;
@@ -24,7 +24,8 @@ public class HttpServerHandler {
             String interfaceName = invocation.getInterfaceName();
 
             // 读取默认的版本号
-            Class classImpl = LocalRegister.get(interfaceName, "1.0");
+            // Class classImpl = LocalRegister.get(interfaceName, "1.0");
+            Class classImpl = ZkMethodDiscovery.lookupMethod(interfaceName, "1.0");
             Method method = classImpl.getMethod(invocation.getMethodName(), invocation.getParameterTypes());
             String result = (String) method.invoke(classImpl.newInstance(), invocation.getParameters());
 

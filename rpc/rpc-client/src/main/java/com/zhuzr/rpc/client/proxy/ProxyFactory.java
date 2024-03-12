@@ -5,7 +5,7 @@ import com.zhuzr.rpc.client.protocol.HttpClient;
 import com.zhuzr.rpc.common.loadbalance.LoadBalancer;
 import com.zhuzr.rpc.common.pojo.Invocation;
 import com.zhuzr.rpc.common.pojo.URL;
-import com.zhuzr.rpc.common.registry.zk.ZkServiceDiscovery;
+import com.zhuzr.rpc.common.registry.ZkServiceDiscovery;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -32,7 +32,7 @@ public class ProxyFactory {
                 HttpClient httpClient = new HttpClient();
 
                 // 服务发现 | 负载均衡 | 服务容灾
-                List<URL> list = ZkServiceDiscovery.lookupService(interfaceClass.getName());
+                List<URL> list = ZkServiceDiscovery.lookupService(interfaceClass.getName(), "1.0");
                 URL url = LoadBalancer.random(list);
                 return httpClient.send(url.getHostname(), url.getPort(), invocation);
             }
