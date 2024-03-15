@@ -15,7 +15,8 @@ public final class ZkUtils {
 
     /**
      * 创建节点
-     * @param path: 节点创建路径
+     *
+     * @param path:  节点创建路径
      * @param value: 序列化后的列表对象
      */
     public static void createPersistentNode(String path, String value) {
@@ -31,6 +32,7 @@ public final class ZkUtils {
 
     /**
      * 获取指定路径下的节点
+     *
      * @param path: 路径
      * @return: 序列化后的列表对象
      */
@@ -44,6 +46,7 @@ public final class ZkUtils {
 
     /**
      * 删除指定路径下持久层节点
+     *
      * @param path: 路径
      */
     public static void deleteAllPersistentNode(String path) {
@@ -53,4 +56,5 @@ public final class ZkUtils {
         }
         zkClient.deleteRecursive(node);
     }
+
 }

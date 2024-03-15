@@ -3,14 +3,14 @@ package com.zhuzr.rpc.common.pojo;
 /**
  * URL类
  */
-public class URL {
+public class ServiceAddress {
     private String hostname;
     private int port;
 
-    public URL() {
+    public ServiceAddress() {
     }
 
-    public URL(String hostname, int port) {
+    public ServiceAddress(String hostname, int port) {
         this.hostname = hostname;
         this.port = port;
     }

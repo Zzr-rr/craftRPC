@@ -1,4 +1,5 @@
 import io.netty.bootstrap.Bootstrap;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -26,7 +27,10 @@ public class MyClient {
                     });
             System.out.println("客户端准备就绪，随时可以起飞~");
             //连接服务端
-            ChannelFuture channelFuture = bootstrap.connect("127.0.0.1", 6666).sync();
+            ChannelFuture channelFuture = bootstrap.connect("127.0.0.1", 8080).sync();
+            Channel channel = channelFuture.channel();
+            System.out.println(channel);
+            channel.writeAndFlush("hello");
             //对通道关闭进行监听
             channelFuture.channel().closeFuture().sync();
         } finally {

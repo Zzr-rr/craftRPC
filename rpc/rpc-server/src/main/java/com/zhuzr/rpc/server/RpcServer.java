@@ -1,7 +1,10 @@
+package com.zhuzr.rpc.server;
+
 import com.zhuzr.rpc.common.utils.ProcotolFrameDecoder;
 import com.zhuzr.rpc.common.utils.RpcMessageCodec;
-import com.zhuzr.rpc.server.RpcServer;
+import com.zhuzr.rpc.server.handler.ConnectionHandler;
 import com.zhuzr.rpc.server.handler.RpcRequestMessageHandler;
+import com.zhuzr.rpc.server.handler.TestHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -11,14 +14,12 @@ import io.netty.handler.logging.LoggingHandler;
 
 import java.util.logging.Logger;
 
-public class MyServer {
-    public static void main(String[] args) throws Exception {
-        String hostname = "localhost";
-        int port = 8080;
+public class RpcServer {
+    private static final Logger logger = Logger.getLogger(RpcServer.class.getName());
+
+    public void start(String hostname, Integer port) {
         EventLoopGroup bossGroup = new NioEventLoopGroup();
         EventLoopGroup workerGroup = new NioEventLoopGroup();
-        RpcMessageCodec rpcMessageCodec = new RpcMessageCodec();
-        RpcRequestMessageHandler rpcRequestMessageHandler = new RpcRequestMessageHandler();
         try {
             // 创建服务端的启动对象，设置参数
             ServerBootstrap bootstrap = new ServerBootstrap();
@@ -29,20 +30,19 @@ public class MyServer {
                     .childHandler(new ChannelInitializer<SocketChannel>() {
                         @Override
                         protected void initChannel(SocketChannel socketChannel) throws Exception {
-                            System.out.println("init Channel");
-                            socketChannel.pipeline().addLast(new ProcotolFrameDecoder(1024, 12, 4, 0, 0));
+                            // socketChannel.pipeline().addLast(new ProcotolFrameDecoder());
                             socketChannel.pipeline().addLast(new LoggingHandler());
-                            socketChannel.pipeline().addLast(rpcMessageCodec);
-                            // 给pipeline管道设置处理器
-                            socketChannel.pipeline().addLast(rpcRequestMessageHandler);
+                            socketChannel.pipeline().addLast(new RpcMessageCodec());
+                            socketChannel.pipeline().addLast(new RpcRequestMessageHandler());
+                            socketChannel.pipeline().addLast(new ConnectionHandler());
                         }
-                    }); // 给workerGroup的EventLoop对应的管道设置处理器
-            // 绑定端口号，启动服务端
+                    });
+            // 绑定端口号，启动服务端 sync用于阻塞 直到服务器启动完成
             Channel channel = bootstrap.bind(8080).sync().channel();
-            System.out.println("netty ready to start, hostname is " + hostname + " ,port is " + port);
+            logger.info("netty ready is already starting, hostname is " + hostname + " ,port is " + port);
             channel.closeFuture().sync();
         } catch (InterruptedException e) {
-            System.out.println("server error" + e);
+            logger.info("server error" + e);
             throw new RuntimeException(e);
         } finally {
             bossGroup.shutdownGracefully();

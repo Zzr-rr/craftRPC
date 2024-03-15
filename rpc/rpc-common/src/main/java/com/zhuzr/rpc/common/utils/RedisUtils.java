@@ -2,7 +2,7 @@ package com.zhuzr.rpc.common.utils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.zhuzr.rpc.common.pojo.URL;
+import com.zhuzr.rpc.common.pojo.ServiceAddress;
 import redis.clients.jedis.Jedis;
 
 import java.util.ArrayList;
@@ -16,16 +16,16 @@ public class RedisUtils {
         jedis.auth("123456");
     }
 
-    public List<URL> getURLs(String key) throws JsonProcessingException {
+    public List<ServiceAddress> getURLs(String key) throws JsonProcessingException {
         String value = jedis.get(key);
-        List<URL> deserializedUrls = new ArrayList<>();
+        List<ServiceAddress> deserializedServiceAddresses = new ArrayList<>();
         if (value != null)
-            deserializedUrls = mapper.readValue(value, mapper.getTypeFactory().constructCollectionType(List.class, URL.class));
-        return deserializedUrls;
+            deserializedServiceAddresses = mapper.readValue(value, mapper.getTypeFactory().constructCollectionType(List.class, ServiceAddress.class));
+        return deserializedServiceAddresses;
     }
 
-    public void putURLs(String key, List<URL> url) throws JsonProcessingException {
-        String value = mapper.writeValueAsString(url);
+    public void putURLs(String key, List<ServiceAddress> serviceAddress) throws JsonProcessingException {
+        String value = mapper.writeValueAsString(serviceAddress);
         jedis.set(key, value);
     }
 }
