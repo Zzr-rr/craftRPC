@@ -12,7 +12,7 @@ public abstract class RpcMessage implements Serializable {
     public static final int RPC_MESSAGE_TYPE_REQUEST = 101;
     public static final int RPC_MESSAGE_TYPE_RESPONSE = 102;
 
-    private int serializeAlgorithm = RpcMessageCodecConfig.GSON;
+    private int serializeAlgorithm = RpcMessageCodecConfig.HESSIAN;
     private int messageType;
 
     public RpcMessage() {

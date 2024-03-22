@@ -1,4 +1,4 @@
-package com.zhuzr.rpc.common;
+package com.zhuzr.rpc.common.Serializer;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

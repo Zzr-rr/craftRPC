@@ -1,11 +1,11 @@
-package com.zhuzr.rpc.common.utils.serializer.impl;
+package com.zhuzr.rpc.common.Serializer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zhuzr.rpc.common.utils.serializer.Serializer;
 
-import java.io.*;
+import java.io.IOException;
 
-public class GsonSerializer implements Serializer {
+public class JacksonSerializer implements Serializer {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -26,5 +26,6 @@ public class GsonSerializer implements Serializer {
             throw new RuntimeException("反序列化失败", e);
         }
     }
+
 
 }

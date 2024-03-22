@@ -6,7 +6,6 @@ import com.zhuzr.rpc.common.pojo.RpcRequestMessage;
 import com.zhuzr.rpc.common.pojo.RpcResponseMessage;
 import com.zhuzr.rpc.common.utils.serializer.Serializer;
 import com.zhuzr.rpc.common.utils.serializer.SerializerFactory;
-import com.zhuzr.rpc.common.utils.serializer.impl.GsonSerializer;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageCodec;

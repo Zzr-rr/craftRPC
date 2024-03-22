@@ -4,14 +4,14 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zhuzr.rpc.common.pojo.RpcRequestMessage;
 import com.zhuzr.rpc.common.utils.serializer.Serializer;
-import com.zhuzr.rpc.common.utils.serializer.impl.GsonSerializer;
+import com.zhuzr.rpc.common.utils.serializer.impl.JacksonSerializer;
 
 import java.util.Arrays;
 
 public class TestSeri {
     private static final ObjectMapper mapper = new ObjectMapper();
 
-    private static final Serializer serializer = new GsonSerializer();
+    private static final Serializer serializer = new JacksonSerializer();
 
 
     public static void main(String[] args) throws JsonProcessingException {

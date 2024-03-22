@@ -9,7 +9,7 @@ public class RpcMessageCodecConfig {
      * Magic number. Verify RpcMessage
      */
     public static final int HESSIAN = 1;
-    public static final int GSON = 2;
+    public static final int JACKSON = 2;
     public static final int MAGIC_NUMBER = 1234;
     public static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
     //version information
