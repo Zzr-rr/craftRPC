@@ -15,10 +15,6 @@ public class RpcRequestMessage extends RpcMessage {
     // 函数参数
     private Object[] parameters;
 
-    public RpcRequestMessage() {
-
-    }
-
     @Override
     public int getMessageType() {
         return RPC_MESSAGE_TYPE_REQUEST;
@@ -31,6 +27,10 @@ public class RpcRequestMessage extends RpcMessage {
         this.returnType = returnType;
         this.parameterTypes = parameterTypes;
         this.parameters = parameters;
+    }
+
+    public RpcRequestMessage(){
+
     }
 
     public int getRequestId() {

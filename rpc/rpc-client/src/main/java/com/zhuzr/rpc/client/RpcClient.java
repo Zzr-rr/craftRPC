@@ -39,22 +39,6 @@ public class RpcClient {
                     });
             // 异步执行连接的操作
             channel = bootstrap.connect(hostname, port).sync().channel();
-            RpcRequestMessage message = new RpcRequestMessage(1, "com.zhuzr.service.HelloService", "sayHello", String.class, new Class[]{String.class}, new Object[]{"hello"});
-
-            // ---- 生成测试数据 ----
-            ByteBuf buf = Unpooled.buffer(256);
-            String testData = "Hello, Netty!";
-            buf.writeBytes(testData.getBytes(Charset.forName("UTF-8")));
-            // ---------------------
-            // 信号其实是成功发送出去了，也没有经过decode，所以说接下来应该排除服务器端的bug。
-            ChannelFuture channelFuture = channel.writeAndFlush(message)
-                    .addListener(promise -> {
-                        if (!promise.isSuccess()) {
-                            System.out.println(promise.cause());
-                        } else {
-                            System.out.println("success");
-                        }
-                    });
 
         } catch (InterruptedException e) {
             throw new RuntimeException(e);

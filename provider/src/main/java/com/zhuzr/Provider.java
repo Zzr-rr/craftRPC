@@ -15,8 +15,8 @@ public class Provider {
         // Netty, Tomcat ... 一些Servlet容器 通过用户去配置网络请求的种类
         // 首先注册服务
         ServiceAddress serviceAddress = new ServiceAddress("localhost", 8080);
-        // ZkServiceRegistry.registerService(HelloService.class.getName(), "1.0", serviceAddress);
-        // ZkMethodRegistry.registerMethod(HelloService.class.getName(), "1.0", HelloServiceImpl.class);
+        ZkServiceRegistry.registerService(HelloService.class.getName(), "1.0", serviceAddress);
+        ZkMethodRegistry.registerMethod(HelloService.class.getName(), "1.0", HelloServiceImpl.class);
         RpcServer rpcServer = new RpcServer();
         rpcServer.start(serviceAddress.getHostname(), serviceAddress.getPort());
     }

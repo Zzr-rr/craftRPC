@@ -1,10 +1,12 @@
 import io.netty.bootstrap.Bootstrap;
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelInitializer;
+import io.netty.buffer.ByteBuf;
+import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.handler.timeout.IdleState;
+import io.netty.handler.timeout.IdleStateEvent;
+import io.netty.handler.timeout.IdleStateHandler;
 
 public class MyClient {
 
@@ -22,16 +24,23 @@ public class MyClient {
                         @Override
                         protected void initChannel(SocketChannel ch) throws Exception {
                             //添加客户端通道的处理器
-                            ch.pipeline().addLast(new MyClientHandler());
+                            ch.pipeline().addLast(new IdleStateHandler(3, 3, 0));
+                            ch.pipeline().addLast(new ChannelDuplexHandler() {
+                                @Override
+                                public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
+                                    IdleStateEvent event = (IdleStateEvent) evt;
+                                    if (event.state() == IdleState.WRITER_IDLE) {
+                                        System.out.println("time passed 3 seconds, send heart");
+                                        ctx.writeAndFlush("ping");
+                                    }
+                                }
+                            });
                         }
                     });
-            System.out.println("客户端准备就绪，随时可以起飞~");
-            //连接服务端
+            // 连接服务端
             ChannelFuture channelFuture = bootstrap.connect("127.0.0.1", 8080).sync();
             Channel channel = channelFuture.channel();
-            System.out.println(channel);
-            channel.writeAndFlush("hello");
-            //对通道关闭进行监听
+            // 对通道关闭进行监听
             channelFuture.channel().closeFuture().sync();
         } finally {
             //关闭线程组

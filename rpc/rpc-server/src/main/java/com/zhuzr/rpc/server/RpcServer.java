@@ -11,6 +11,9 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.logging.LoggingHandler;
+import io.netty.handler.timeout.IdleState;
+import io.netty.handler.timeout.IdleStateEvent;
+import io.netty.handler.timeout.IdleStateHandler;
 
 import java.util.logging.Logger;
 
@@ -25,6 +28,10 @@ public class RpcServer {
             ServerBootstrap bootstrap = new ServerBootstrap();
             // 设置两个线程组boosGroup和workerGroup
             bootstrap.group(bossGroup, workerGroup)
+                    // 启用 Naggle 算法
+                    .childOption(ChannelOption.TCP_NODELAY, true)
+                    // 是否开启 TCP 底层心跳机制
+                    .childOption(ChannelOption.SO_KEEPALIVE, true)
                     // 设置服务端通道实现类型
                     .channel(NioServerSocketChannel.class)
                     .childHandler(new ChannelInitializer<SocketChannel>() {

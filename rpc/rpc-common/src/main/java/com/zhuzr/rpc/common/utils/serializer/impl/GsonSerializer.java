@@ -1,14 +1,11 @@
 package com.zhuzr.rpc.common.utils.serializer.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.zhuzr.rpc.common.utils.serializer.Serializer;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
 
-public class JavaSerializer implements Serializer {
+public class GsonSerializer implements Serializer {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
