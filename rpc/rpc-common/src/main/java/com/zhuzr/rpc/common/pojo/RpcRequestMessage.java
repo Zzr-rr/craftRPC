@@ -29,7 +29,7 @@ public class RpcRequestMessage extends RpcMessage {
         this.parameters = parameters;
     }
 
-    public RpcRequestMessage(){
+    public RpcRequestMessage() {
 
     }
 

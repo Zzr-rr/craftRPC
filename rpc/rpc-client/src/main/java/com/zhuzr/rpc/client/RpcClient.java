@@ -7,6 +7,7 @@ import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.handler.codec.LineBasedFrameDecoder;
 import io.netty.handler.logging.LoggingHandler;
 
 import java.util.logging.Logger;
@@ -26,7 +27,6 @@ public class RpcClient {
                         @Override
                         protected void initChannel(SocketChannel ch) throws Exception {
                             logger.info("client connected, ready to send ...");
-                            // TODO 加入防粘包拆包机制
                             // TODO 加入心跳机制、服务上下线通知等相关机制。
                             ch.pipeline().addLast(new RpcMessageCodec());
                             ch.pipeline().addLast(new RpcResponseMessageHandler());

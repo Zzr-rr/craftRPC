@@ -15,7 +15,6 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.List;
-import java.util.function.Supplier;
 import java.util.logging.Logger;
 
 public class ProxyFactory {
@@ -27,8 +26,8 @@ public class ProxyFactory {
             @Override
             public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
                 int sequenceId = SequenceGenerator.getNextSequence();
-                RpcRequestMessage requestMessage = new RpcRequestMessage(sequenceId, interfaceClass.getName(), method.getName(), method.getReturnType(),
-                        method.getParameterTypes(), args);
+                RpcRequestMessage requestMessage = new RpcRequestMessage(sequenceId, interfaceClass.getName(), method.getName(),
+                        method.getReturnType(), method.getParameterTypes(), args);
                 // 服务发现 | 负载均衡 | 服务容灾
                 List<ServiceAddress> list = ZkServiceDiscovery.lookupService(interfaceClass.getName(), "1.0");
                 ServiceAddress serviceAddress = LoadBalancer.random(list);
@@ -39,7 +38,6 @@ public class ProxyFactory {
                                 logger.info(String.valueOf(promise.cause()));
                             }
                         });
-
                 DefaultPromise<Object> promise = new DefaultPromise<>(channel.eventLoop());
                 RpcResponseMessageHandler.PROMISES.put(requestMessage.getRequestId(), promise);
                 promise.await();
