@@ -1,7 +1,7 @@
 package com.zhuzr.rpc.common;
 
 import com.zhuzr.rpc.common.pojo.RpcRequestMessage;
-import com.zhuzr.rpc.common.utils.RpcMessageCodec;
+import com.zhuzr.rpc.common.handler.RpcMessageCodec;
 import io.netty.channel.embedded.EmbeddedChannel;
 import io.netty.handler.logging.LoggingHandler;
 

@@ -1,4 +1,4 @@
-package com.zhuzr.rpc.common.utils;
+package com.zhuzr.rpc.common.handler;
 
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 

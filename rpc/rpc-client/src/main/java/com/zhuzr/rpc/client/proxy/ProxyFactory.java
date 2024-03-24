@@ -15,8 +15,11 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.List;
+import java.util.function.Supplier;
+import java.util.logging.Logger;
 
 public class ProxyFactory {
+    private static final Logger logger = Logger.getLogger("ProxyFactory");
 
     public static <T> T getProxy(Class interfaceClass) {
         // 用户配置
@@ -29,22 +32,17 @@ public class ProxyFactory {
                 // 服务发现 | 负载均衡 | 服务容灾
                 List<ServiceAddress> list = ZkServiceDiscovery.lookupService(interfaceClass.getName(), "1.0");
                 ServiceAddress serviceAddress = LoadBalancer.random(list);
-
-                // 获取通讯的通道
                 Channel channel = RpcClient.getChannel(serviceAddress.getHostname(), serviceAddress.getPort());
-                // 发送消息
                 channel.writeAndFlush(requestMessage)
                         .addListener(promise -> {
                             if (!promise.isSuccess()) {
-                                System.out.println(promise.cause());
-                            } else {
-                                System.out.println("Client send successfully.");
+                                logger.info(String.valueOf(promise.cause()));
                             }
                         });
+
                 DefaultPromise<Object> promise = new DefaultPromise<>(channel.eventLoop());
-                RpcResponseMessageHandler.PROMISES.put(sequenceId, promise);
-                // 等待 promise 的结果
-                promise.await(); // 如果成功或失败 都不会抛出异常
+                RpcResponseMessageHandler.PROMISES.put(requestMessage.getRequestId(), promise);
+                promise.await();
                 if (!promise.isSuccess()) {
                     throw new RuntimeException(promise.cause());
                 }

@@ -10,20 +10,22 @@ import io.netty.channel.SimpleChannelInboundHandler;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.logging.Logger;
 
 public class RpcRequestMessageHandler extends SimpleChannelInboundHandler<RpcRequestMessage> {
+
+    private static final Logger logger = Logger.getLogger("RpcRequestMessageHandler");
+
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, RpcRequestMessage rpcRequestMessage) throws Exception {
-        System.out.println("server received rpcRequestMessage:" + rpcRequestMessage);
         RpcResponseMessage responseMessage = new RpcResponseMessage();
-        // 读取到相应的函数后向管道中写入信息
         try {
             String interfaceName = rpcRequestMessage.getInterfaceName();
-            // 读取默认的版本号
             Class classImpl = ZkMethodDiscovery.lookupMethod(interfaceName, "1.0");
             Method method = classImpl.getMethod(rpcRequestMessage.getMethodName(), rpcRequestMessage.getParameterTypes());
             Object result = method.invoke(classImpl.newInstance(), rpcRequestMessage.getParameters());
             responseMessage.setResponseValue(result);
+            responseMessage.setSequenceId(rpcRequestMessage.getRequestId());
             channelHandlerContext.writeAndFlush(responseMessage);
         } catch (Exception e) {
             e.printStackTrace();

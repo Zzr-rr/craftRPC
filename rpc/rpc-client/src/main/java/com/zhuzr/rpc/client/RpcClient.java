@@ -1,26 +1,21 @@
 package com.zhuzr.rpc.client;
 
 import com.zhuzr.rpc.client.handler.RpcResponseMessageHandler;
-import com.zhuzr.rpc.client.handler.TestHandler;
-import com.zhuzr.rpc.common.pojo.RpcRequestMessage;
-import com.zhuzr.rpc.common.utils.ProcotolFrameDecoder;
-import com.zhuzr.rpc.common.utils.RpcMessageCodec;
+import com.zhuzr.rpc.common.handler.RpcMessageCodec;
 import io.netty.bootstrap.Bootstrap;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.logging.LoggingHandler;
-import org.apache.tomcat.util.net.openssl.ciphers.Protocol;
 
-import java.nio.charset.Charset;
+import java.util.logging.Logger;
 
 @ChannelHandler.Sharable
 public class RpcClient {
     private static Channel channel = null;
     private static final Object LOCK = new Object();
+    private static Logger logger = Logger.getLogger("RpcClient Logger");
 
     private static void initChannel(String hostname, int port) {
         NioEventLoopGroup eventLoopGroup = new NioEventLoopGroup();
@@ -30,16 +25,15 @@ public class RpcClient {
                     .handler(new ChannelInitializer<SocketChannel>() {
                         @Override
                         protected void initChannel(SocketChannel ch) throws Exception {
-                            System.out.println("ready to send");
-                            // ch.pipeline().addLast(new ProcotolFrameDecoder(1024, 12, 4, 0, 0));
-                            ch.pipeline().addLast(new LoggingHandler());
+                            logger.info("client connected, ready to send ...");
+                            // TODO 加入防粘包拆包机制
+                            // TODO 加入心跳机制、服务上下线通知等相关机制。
                             ch.pipeline().addLast(new RpcMessageCodec());
                             ch.pipeline().addLast(new RpcResponseMessageHandler());
                         }
                     });
             // 异步执行连接的操作
             channel = bootstrap.connect(hostname, port).sync().channel();
-
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
