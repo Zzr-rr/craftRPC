@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<services>
+    <service>
+        <rawMethod>com.zhuzr.service.HelloService</rawMethod>
+        <implementation>com.zhuzr.service.impl.HelloServiceImpl</implementation>
+        <host>localhost</host>
+        <port>8080</port>
+    </service>
+</services>

@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 public class RpcClient {
     private static Channel channel = null;
     private static final Object LOCK = new Object();
-    private static Logger logger = Logger.getLogger("RpcClient Logger");
+    private static final Logger logger = Logger.getLogger("RpcClient Logger");
 
     private static void initChannel(String hostname, int port) {
         NioEventLoopGroup eventLoopGroup = new NioEventLoopGroup();
@@ -26,7 +26,7 @@ public class RpcClient {
                     .handler(new ChannelInitializer<SocketChannel>() {
                         @Override
                         protected void initChannel(SocketChannel ch) throws Exception {
-                            logger.info("client connected, ready to send ...");
+                            logger.info("client connected, ready to send");
                             // TODO 加入心跳机制、服务上下线通知等相关机制。
                             ch.pipeline().addLast(new RpcMessageCodec());
                             ch.pipeline().addLast(new RpcResponseMessageHandler());
