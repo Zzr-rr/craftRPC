@@ -1,35 +1,35 @@
 package com.zhuzr.rpc.server.utils;
 
-import com.zhuzr.rpc.server.pojo.Service;
-import com.zhuzr.rpc.server.pojo.Services;
+import com.zhuzr.rpc.server.pojo.RpcProvider;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
-
 public class XmlUtil {
-    public static Services parseXML() throws DocumentException {
-
+    public static RpcProvider parseXML() {
         SAXReader saxReader = new SAXReader();
-        Document document = saxReader.read(XmlUtil.class.getClassLoader().getResourceAsStream("META-INF/craft.xml"));
-        Element rootElement = document.getRootElement();
-        List<Element> elements = rootElement.elements("service");
-        List<Service> services = new CopyOnWriteArrayList<>();
+        RpcProvider rpcProvider = new RpcProvider();
         try {
-            for (Element element : elements) {
-                String rawMethod = element.elementTextTrim("rawMethod");
-                Class implementation = Class.forName(element.elementTextTrim("implementation"));
-                String host = element.elementTextTrim("host");
-                int port = Integer.parseInt(element.elementTextTrim("port"));
-                Service service = new Service(rawMethod, implementation, host, port);
-                services.add(service);
-            }
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
+            Document document = saxReader.read(XmlUtil.class.getClassLoader().getResourceAsStream("META-INF/craft.xml"));
+            Element rootElement = document.getRootElement();
+
+            String packagePath = rootElement.elementTextTrim("packagePath");
+            String host = rootElement.elementTextTrim("host");
+            int port = Integer.parseInt(rootElement.elementTextTrim("port") != null ? rootElement.elementTextTrim("port") : "0");
+            String registration = rootElement.elementTextTrim("registration");
+            String registrationAddress = rootElement.elementTextTrim("registration");
+            if (packagePath == null || host == null || port == 0 || registrationAddress == null) return null;
+            if (registration == null) registration = "zookeeper";
+
+            rpcProvider.setPackagePath(packagePath);
+            rpcProvider.setHost(host);
+            rpcProvider.setPort(port);
+            rpcProvider.setRegistration(registration);
+            rpcProvider.setRegistrationAddress(registrationAddress);
+        } catch (DocumentException e) {
+            throw new RuntimeException();
         }
-        return new Services(services);
+        return rpcProvider;
     }
 }

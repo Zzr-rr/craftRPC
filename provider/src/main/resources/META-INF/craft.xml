@@ -1,9 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<services>
-    <service>
-        <rawMethod>com.zhuzr.service.HelloService</rawMethod>
-        <implementation>com.zhuzr.service.impl.HelloServiceImpl</implementation>
-        <host>localhost</host>
-        <port>8080</port>
-    </service>
-</services>
+<!--<services>-->
+<!--    <service>-->
+<!--        <rawMethod>com.zhuzr.service.HelloService</rawMethod>-->
+<!--        <implementation>com.zhuzr.service.impl.HelloServiceImpl</implementation>-->
+<!--        <host>localhost</host>-->
+<!--        <port>8080</port>-->
+<!--    </service>-->
+<!--</services>-->
+<rpcProvider>
+    <packagePath>com.zhuzr.service.impl</packagePath>
+    <host>localhost</host>
+    <port>8080</port>
+    <registration>zookeeper</registration>
+    <registrationAddress>123.56.138.30:2181</registrationAddress>
+</rpcProvider>
